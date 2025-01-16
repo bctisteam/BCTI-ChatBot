@@ -1,15 +1,15 @@
-/* Body styles */
+/* General styles */
 body {
+    background-color: #1a1a2e; /* Dark blue background */
+    color: #e0e0e0; /* Light text color for contrast */
     font-family: Arial, sans-serif;
-    background-color: #343449;
-    color: #ffffff;
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
-    margin: 0;
-    padding: 10px;
 }
 
 /* Container to center content */
@@ -32,24 +32,25 @@ h2 {
     margin-bottom: 20px;
 }
 /* Button styles */
-button#startBtn {
+button#startBtn, button#stopBtn {
     padding: 10px 20px;
     font-size: 1.2rem;
-    background-color: #675dc0;
-    color: rgb(0, 0, 0);
+    background-color: #162447; /* Darker blue */
+    color: #e0e0e0; /* Light text color */
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
     margin-bottom: 20px;
+    margin: 0 10px;
 }
 
-button#startBtn:hover {
-    background-color: #455aa0;
+button#startBtn:hover, button#stopBtn:hover {
+    background-color: #1f4068; /* Slightly lighter blue */
 }
 
-button#startBtn:active {
-    background-color: #4547b6;
+button#startBtn:active, button#stopBtn:active {
+    background-color: #1b1b2f; /* Even darker blue */
 }
 
 /* Output area styles */
@@ -57,16 +58,13 @@ button#startBtn:active {
     margin-top: 20px;
     width: 100%;
     max-width: 600px;
+    background-color: #162447; /* Darker blue */
+    color: #e0e0e0; /* Light text color */
+    padding: 20px;
     border-radius: 5px;
-    background-color: rgb(192, 209, 255);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-size: 1.1rem;
-    line-height: 1.6;
-    word-wrap: break-word;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #343449;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Interim and final text separation */
@@ -105,4 +103,34 @@ button#startBtn:active {
         font-size: 0.9rem;
         padding: 10px;
     }
+}
+
+/* Speaking indicator styles */
+.speaking {
+    background-color: #1f4068; /* Slightly lighter blue */
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.speaking span {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #433775;
+    color: aliceblue;
+    border-radius: 50%;
+    margin-right: 5px;
+    animation: pulse 1s infinite;
+}
+
+select{
+    padding: 10px 20px;
+    font-size: .8rem;
+    background-color: #162447; /* Darker blue */
+    color: #e0e0e0; /* Light text color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 20px;
 }
