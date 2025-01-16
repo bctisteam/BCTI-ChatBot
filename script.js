@@ -26,31 +26,32 @@ if ("webkitSpeechRecognition" in window) {
 
         // Check for the specific word ("hello") in the final transcript
         if (finalTranscript.toLowerCase().includes("hello")) {
+            let greetings = [
+                "Hello! How can I help you?",
+                "Hey I'm ChatBot! How can I help you?",
+                "Howdy! What's on your mind?",
+                "Hi there! I'm here to assist you.",
+                "Hey, hey, hey! What brings you here?",
+                "Hello! Got any questions? I’ve got answers!"
+            ];
+            let greeting = greetings[Math.floor(Math.random() * greetings.length)];
             outputDiv.innerHTML = `
-                I heard "hello"! How can I assist you today? <br>
-                Interim: ${interimTranscript} <br>
-                Final: ${finalTranscript}
+                ChatBot Response: ${greeting} <br>
+                What you said: ${finalTranscript}
             `;
         } else {
             outputDiv.innerHTML = `
-                Interim: ${interimTranscript} <br>
-                Final: ${finalTranscript}
+                What you said: ${finalTranscript}
             `;
         }
     };
 
     recognition.onend = () => {
-        startButton.textContent = "Start Recording";
+        recognition.start(); // Restart recognition immediately when it ends
     };
 
-    startButton.addEventListener("click", () => {
-        // Check if recognition is already started and stop if necessary
-        if (recognition.recognizing) {
-            recognition.stop();
-        } else {
-            recognition.start();
-        }
-    });
+    // Start recognition immediately
+    recognition.start();
 } else {
     outputDiv.textContent = "Web Speech API not supported in this browser.";
 }

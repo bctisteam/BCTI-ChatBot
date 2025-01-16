@@ -26,6 +26,11 @@ h1 {
     margin-bottom: 20px;
 }
 
+h2 {
+    font-size: 1.5rem;
+    color: #9cafee;
+    margin-bottom: 20px;
+}
 /* Button styles */
 button#startBtn {
     padding: 10px 20px;
