@@ -1,6 +1,8 @@
 const startButton = document.getElementById("startBtn");
 const outputDiv = document.getElementById("output");
 
+let synth = window.speechSynthesis;
+
 if ("webkitSpeechRecognition" in window) {
     const recognition = new webkitSpeechRecognition();
     recognition.continuous = true;
@@ -25,7 +27,7 @@ if ("webkitSpeechRecognition" in window) {
         }
 
         // Check for the specific word ("hello") in the final transcript
-        if (finalTranscript.toLowerCase().includes("hello")) {
+        if (finalTranscript.toLowerCase().includes("hello")||finalTranscript.toLowerCase().includes("hi")||finalTranscript.toLowerCase().includes("hey")) {
             let greetings = [
                 "Hello! How can I help you?",
                 "Hey I'm ChatBot! How can I help you?",
@@ -35,9 +37,18 @@ if ("webkitSpeechRecognition" in window) {
                 "Hello! Got any questions? I’ve got answers!"
             ];
             let greeting = greetings[Math.floor(Math.random() * greetings.length)];
+
+            let utterance = new SpeechSynthesisUtterance(greeting);
+
+            utterance.lang = 'en-US';
+            utterance.pitch = 1;
+            utterance.rate = 1;
+
+            synth.speak(utterance);
             outputDiv.innerHTML = `
-                ChatBot Response: ${greeting} <br>
-                What you said: ${finalTranscript}
+                What you said: ${finalTranscript} <br>
+                ChatBot Response: ${greeting}
+                
             `;
         } else {
             outputDiv.innerHTML = `
