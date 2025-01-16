@@ -1,0 +1,103 @@
+/* Body styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #343449;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    padding: 10px;
+}
+
+/* Container to center content */
+.container {
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+}
+
+/* Header styles */
+h1 {
+    font-size: 2.5rem;
+    color: #9cafee;
+    margin-bottom: 20px;
+}
+
+/* Button styles */
+button#startBtn {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    background-color: #675dc0;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 20px;
+}
+
+button#startBtn:hover {
+    background-color: #455aa0;
+}
+
+button#startBtn:active {
+    background-color: #4547b6;
+}
+
+/* Output area styles */
+#output {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 5px;
+    background-color: rgb(192, 209, 255);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    word-wrap: break-word;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #343449;
+}
+
+/* Interim and final text separation */
+#output br {
+    margin-bottom: 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    button#startBtn {
+        padding: 8px 16px;
+        font-size: 1rem;
+    }
+
+    #output {
+        font-size: 1rem;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    button#startBtn {
+        font-size: 0.9rem;
+        padding: 6px 12px;
+    }
+
+    #output {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+}
