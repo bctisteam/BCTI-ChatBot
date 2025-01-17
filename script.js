@@ -78,6 +78,40 @@ if ("webkitSpeechRecognition" in window) {
                 What you said: ${finalTranscript} <br>
                 ChatBot Response: ${greeting}
             `;
+        } else if (finalTranscript.toLowerCase().includes("joke")) {
+            // Specify the category of jokes, e.g., programming
+            const jokeCategory = "programming";
+        
+            fetch(`https://official-joke-api.appspot.com/jokes/${jokeCategory}/random`)
+                .then(response => response.json())
+                .then(data => {
+                    let joke = `${data.setup} - ${data.punchline}`;
+        
+                    let utterance = new SpeechSynthesisUtterance(joke);
+                    utterance.lang = 'en-US';
+                    utterance.pitch = 1;
+                    utterance.rate = 1;
+                    utterance.voice = voices[selectedVoiceIndex];
+        
+                    recognition.stop();
+                    synth.speak(utterance);
+        
+                    utterance.onend = () => {
+                        if (record) {
+                            recognition.start();
+                        }
+                    };
+        
+                    outputDiv.innerHTML = `
+                        What you said: ${finalTranscript} <br>
+                        ChatBot Response: ${joke}
+                    `;
+                })
+                .catch(error => {
+                    console.error('Error fetching joke:', error);
+                    outputDiv.innerHTML = "Sorry, I couldn't fetch a joke right now.";
+                }); 
+        
         } else if (finalTranscript.toLowerCase().includes("steam") || finalTranscript.toLowerCase().includes("stem")) {
             stemResponse = "The STEAM Lab is located on the second floor at CTI 215. There are other projects there like PuzzleBot, DrawBot, BuzzMe, and the MPS station."
 
@@ -114,8 +148,6 @@ if ("webkitSpeechRecognition" in window) {
         recognition.start();
         startButton.textContent = "Listening";
     });
-}
-        
-        else {
+} else {
     outputDiv.textContent = "Web Speech API not supported in this browser.";
 }
