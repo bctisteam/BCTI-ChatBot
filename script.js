@@ -134,7 +134,6 @@ if ("webkitSpeechRecognition" in window) {
             `;
         } else {
             const nondir = "I'm sorry, what you said is not in my directory. Could you please ask another question?";
-            recognition.stop();
             outputDiv.innerHTML = `
                 What you said: ${finalTranscript} <br>
                 ChatBot Response: ${nondir}
@@ -148,7 +147,6 @@ if ("webkitSpeechRecognition" in window) {
     };
 
     startButton.addEventListener("click", () => {
-        record = true;
         recognition.start();
         startButton.textContent = "Listening";
     });
