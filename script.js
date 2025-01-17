@@ -98,7 +98,7 @@ if ("webkitSpeechRecognition" in window) {
 
             outputDiv.innerHTML = `
                 What you said: ${finalTranscript} <br>
-                ChatBot Response: ${joke}
+                ChatBot Response: ${stemResponse}
             `;
         } else {
             nondir = "I'm sorry, what you said is not in my directory. Could you please ask another question?"
