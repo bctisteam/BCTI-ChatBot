@@ -7,25 +7,6 @@ let voices = [];
 let selectedVoiceIndex = 0; // Default to the first voice
 let record = false;
 
-function populateVoiceList() {
-    voices = synth.getVoices();
-    voices.forEach((voice, index) => {
-        const option = document.createElement("option");
-        option.value = index;
-        option.textContent = `${voice.name} (${voice.lang})`;
-        voiceSelect.appendChild(option);
-    });
-}
-
-populateVoiceList();
-if (speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = populateVoiceList;
-}
-
-voiceSelect.addEventListener("change", () => {
-    selectedVoiceIndex = voiceSelect.value;
-});
-
 if ("webkitSpeechRecognition" in window) {
     const recognition = new webkitSpeechRecognition();
     recognition.continuous = true;
@@ -49,21 +30,20 @@ if ("webkitSpeechRecognition" in window) {
             }
         }
 
-        if (finalTranscript.toLowerCase().includes("hello") || finalTranscript.toLowerCase().includes("hi") || finalTranscript.toLowerCase().includes("hey")) {
-            let greetings = [
+        if (/hello|hi|hey/i.test(finalTranscript)) {
+            const greetings = [
                 "Got any questions? I’ve got answers!",
                 "I'm ChatBot! How can I help you?",
                 "Howdy! What's on your mind?",
                 "What's up! I'm here to assist you.",
                 "Good day! What brings you here?"
             ];
-            let greeting = greetings[Math.floor(Math.random() * greetings.length)];
-
-            let utterance = new SpeechSynthesisUtterance(greeting);
+            const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+            const utterance = new SpeechSynthesisUtterance(greeting);
             utterance.lang = 'en-US';
             utterance.pitch = 1;
             utterance.rate = 1;
-            utterance.voice = voices[selectedVoiceIndex];
+            utterance.voice = voices[1];
 
             recognition.stop();
             synth.speak(utterance);
@@ -79,55 +59,73 @@ if ("webkitSpeechRecognition" in window) {
                 ChatBot Response: ${greeting}
             `;
         } else if (finalTranscript.toLowerCase().includes("joke")) {
-            // Specify the category of jokes, e.g., programming
             const jokeCategory = "programming";
-        
+            outputDiv.innerHTML = `
+                What you said: ${finalTranscript} <br>
+                ChatBot Response: Fetching a joke for you...
+            `;
             fetch(`https://official-joke-api.appspot.com/jokes/${jokeCategory}/random`)
                 .then(response => response.json())
                 .then(data => {
-                    let joke = `${data.setup} - ${data.punchline}`;
-        
-                    let utterance = new SpeechSynthesisUtterance(joke);
-                    utterance.lang = 'en-US';
-                    utterance.pitch = 1;
-                    utterance.rate = 1;
-                    utterance.voice = voices[selectedVoiceIndex];
-        
-                    recognition.stop();
-                    synth.speak(utterance);
-        
-                    utterance.onend = () => {
-                        if (record) {
-                            recognition.start();
-                        }
-                    };
-        
-                    outputDiv.innerHTML = `
-                        What you said: ${finalTranscript} <br>
-                        ChatBot Response: ${joke}
-                    `;
+                    const joke = Array.isArray(data) ? data[0] : data;
+                    if (joke && joke.setup && joke.punchline) {
+                        const jokeText = `${joke.setup} ${joke.punchline}`;
+                        const utterance = new SpeechSynthesisUtterance(jokeText);
+                        utterance.lang = 'en-US';
+                        utterance.pitch = 1;
+                        utterance.rate = 1;
+                        utterance.voice = voices[1];
+
+                        recognition.stop();
+                        synth.speak(utterance);
+
+                        utterance.onend = () => {
+                                recognition.start();
+                        };
+
+                        outputDiv.innerHTML = `
+                            What you said: ${finalTranscript} <br>
+                            ChatBot Response: ${jokeText}
+                        `;
+                    } else {
+                        throw new Error("Joke data is missing setup or punchline.");
+                    }
                 })
                 .catch(error => {
                     console.error('Error fetching joke:', error);
-                    outputDiv.innerHTML = "Sorry, I couldn't fetch a joke right now.";
-                }); 
-        
-        } else if (finalTranscript.toLowerCase().includes("steam") || finalTranscript.toLowerCase().includes("stem")) {
-            stemResponse = "The STEAM Lab is located on the second floor at CTI 215. There are other projects there like PuzzleBot, DrawBot, BuzzMe, and the MPS station."
+                    const fallbackJoke = "Why don’t programmers like nature? It has too many bugs.";
+                    const utterance = new SpeechSynthesisUtterance(fallbackJoke);
+                    utterance.lang = 'en-US';
+                    utterance.pitch = 1;
+                    utterance.rate = 1;
+                    utterance.voice = voices[1];
 
-            let utterance = new SpeechSynthesisUtterance(stemResponse);
+                    recognition.stop();
+                    synth.speak(utterance);
+
+                    utterance.onend = () => {
+                            recognition.start();
+                    };
+
+                    outputDiv.innerHTML = `
+                        What you said: ${finalTranscript} <br>
+                        ChatBot Response: ${fallbackJoke}
+                    `;
+                });
+
+        } else if (/steam|stem/i.test(finalTranscript)) {
+            const stemResponse = "The STEAM Lab is located on the second floor at CTI 215. There are other projects there like PuzzleBot, DrawBot, BuzzMe, and the MPS station.";
+            const utterance = new SpeechSynthesisUtterance(stemResponse);
             utterance.lang = 'en-US';
             utterance.pitch = 1;
             utterance.rate = 1;
-            utterance.voice = voices[selectedVoiceIndex];
+            utterance.voice = voices[1];
 
             recognition.stop();
             synth.speak(utterance);
 
             utterance.onend = () => {
-                if (record) {
                     recognition.start();
-                }
             };
 
             outputDiv.innerHTML = `
@@ -135,12 +133,18 @@ if ("webkitSpeechRecognition" in window) {
                 ChatBot Response: ${stemResponse}
             `;
         } else {
-            nondir = "I'm sorry, what you said is not in my directory. Could you please ask another question?"
+            const nondir = "I'm sorry, what you said is not in my directory. Could you please ask another question?";
+            recognition.stop();
             outputDiv.innerHTML = `
-                What you said: ${finalTranscript}
+                What you said: ${finalTranscript} <br>
                 ChatBot Response: ${nondir}
             `;
         }
+    };
+
+    recognition.onerror = (event) => {
+        console.error("Speech recognition error:", event.error);
+        outputDiv.innerHTML = "An error occurred with speech recognition. Please try again.";
     };
 
     startButton.addEventListener("click", () => {
